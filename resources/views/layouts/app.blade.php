@@ -31,6 +31,8 @@
         input, select, textarea { width: 100%; padding: 8px; border: 1px solid #d1d5db; border-radius: 6px; font: inherit; }
         .erro { color: #dc2626; font-size: .8rem; }
         .vazio { text-align: center; padding: 32px; background: #fff; border-radius: 8px; }
+        .filtros { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; align-items: end; margin-bottom: 16px; }
+        .filtros label { margin: 0 0 4px; font-size: .8rem; }
     </style>
 </head>
 <body>

@@ -8,11 +8,25 @@ use Illuminate\Validation\Rule;
 
 class CandidatoController extends Controller
 {
-    public function index()
-    {
-        $candidatos = Candidato::latest()->get();
-        return view('candidatos.index', compact('candidatos'));
-    }
+    public function index(Request $request)
+{
+    $candidatos = Candidato::query()
+        ->when($request->filled('busca'), function ($query) use ($request) {
+            $termo = '%' . $request->busca . '%';
+            $query->where(function ($q) use ($termo) {
+                $q->where('nome', 'like', $termo)
+                  ->orWhere('email', 'like', $termo);
+            });
+        })
+        ->when($request->filled('cargo'), fn ($q) => $q->where('cargo_desejado', 'like', '%' . $request->cargo . '%'))
+        ->when($request->filled('cidade'), fn ($q) => $q->where('cidade', 'like', '%' . $request->cidade . '%'))
+        ->when($request->filled('nivel'), fn ($q) => $q->where('nivel', $request->nivel))
+        ->when($request->filled('status'), fn ($q) => $q->where('status', $request->status))
+        ->latest()
+        ->get();
+
+    return view('candidatos.index', compact('candidatos'));
+} 
 
     public function create()
     {
